@@ -9,15 +9,10 @@ public class GitUtils {
         File projectFolder = new File(basePath + "/" + project);
 
         if (projectFolder.exists()) {
-            CommandUtils.execute("cd " + basePath + "; git pull");
+            CommandUtils.execute("cd " + projectFolder.getAbsolutePath() + "; git pull");
         }
         else {
-            if (projectFolder.mkdir()) {
-                CommandUtils.execute("cd " + basePath + "; git clone " + cloneUrl);
-            }
-            else {
-                throw new RuntimeException("Could not create directory " + projectFolder.getAbsolutePath());
-            }
+            CommandUtils.execute("cd " + basePath + "; git clone " + cloneUrl);
         }
     }
 
