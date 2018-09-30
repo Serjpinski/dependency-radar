@@ -1,6 +1,7 @@
 package radar.project;
 
 import radar.file.FileType;
+import radar.util.LogUtils;
 
 import java.io.File;
 import java.util.*;
@@ -8,16 +9,13 @@ import java.util.*;
 public class Project {
 
     private final String name;
-    private final Set<String> nameAliases;
     private final File root;
     private final Map<FileType, List<File>> files;
+    private final Map<Prop, List<String>> props;
 
     public Project(String name, String path) {
 
         this.name = name;
-
-        this.nameAliases = new HashSet<>();
-        nameAliases.add(name);
 
         this.root = new File(path);
 
@@ -26,14 +24,21 @@ public class Project {
         }
 
         files = new HashMap<>();
+        props = new HashMap<>();
+    }
+
+    public void addFile(FileType fileType, File file) {
+        //LogUtils.log(this, "Detected " + fileType + " file: " + file.getName());
+        files.computeIfAbsent(fileType, k -> new ArrayList<>()).add(file);
+    }
+
+    public void addProp(Prop prop, String value) {
+        LogUtils.log(this, "Added prop " + prop + " = " + value);
+        props.computeIfAbsent(prop, k -> new ArrayList<>()).add(value);
     }
 
     public String getName() {
         return name;
-    }
-
-    public Set<String> getNameAliases() {
-        return nameAliases;
     }
 
     public File getRoot() {
@@ -42,5 +47,9 @@ public class Project {
 
     public Map<FileType, List<File>> getFiles() {
         return files;
+    }
+
+    public Map<Prop, List<String>> getProps() {
+        return props;
     }
 }

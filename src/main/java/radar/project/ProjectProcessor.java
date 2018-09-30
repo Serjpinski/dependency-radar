@@ -9,7 +9,9 @@ import java.util.Objects;
 public class ProjectProcessor {
 
     public static void process(Project project) {
+
         processFolder(project, project.getRoot());
+        project.getFiles().forEach((k, v) -> LogUtils.log(project, "Processed " + v.size() + " " + k + " files"));
     }
 
     private static void processFolder(Project project, File folder) {
@@ -21,7 +23,7 @@ public class ProjectProcessor {
                 FileType fileType = detectFileType(file);
 
                 if (fileType != null) {
-                    LogUtils.log(project, "Detected " + fileType + " file: " + file.getName());
+                    project.addFile(fileType, file);
                     fileType.getFileProcessor().process(project, file);
                 }
             }
