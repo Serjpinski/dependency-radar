@@ -2,7 +2,6 @@ package radar;
 
 import radar.project.Project;
 import radar.project.ProjectProcessor;
-import radar.util.LogUtils;
 
 import java.io.File;
 import java.util.Objects;
@@ -22,7 +21,6 @@ public class Radar {
                 if (file.isDirectory()) {
 
                     Project project = new Project(file.getName(), file.getAbsolutePath());
-                    LogUtils.log(project, "Detected project");
                     ProjectProcessor.process(project);
                 }
             }

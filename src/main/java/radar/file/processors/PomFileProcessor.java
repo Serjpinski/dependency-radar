@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 public class PomFileProcessor implements FileProcessor {
 
@@ -25,18 +26,20 @@ public class PomFileProcessor implements FileProcessor {
         }
     }
 
-    private static final String NAME_XPATH = "/project/name/text()";
-    private static final String GROUP_XPATH = "/project/groupId/text()";
-    private static final String ARTIFACT_XPATH = "/project/artifactId/text()";
-
     @Override
     public void process(Project project, File file) {
 
         try {
             Document document = DOCUMENT_BUILDER.parse(file);
-            XPathUtils.xpath(document, NAME_XPATH).forEach(k -> project.addProp(Prop.POM_NAME, k));
-            XPathUtils.xpath(document, GROUP_XPATH).forEach(k -> project.addProp(Prop.POM_GROUP, k));
-            XPathUtils.xpath(document, ARTIFACT_XPATH).forEach(k -> project.addProp(Prop.POM_ARTIFACT, k));
+
+            project.addProp(Prop.POM_NAME, XPathUtils.getOne(document, "/project/name"));
+            project.addProp(Prop.POM_GROUP, XPathUtils.getOne(document, "/project/groupId"));
+            project.addProp(Prop.POM_ARTIFACT, XPathUtils.getOne(document, "/project/artifactId"));
+
+            XPathUtils.get(document, "/project/dependencies/dependency").forEach(k -> {
+                Map<String, Object> map = (Map<String, Object>) k;
+                project.addProp(Prop.POM_DEPENDENCY, map.get("groupId") + "." + map.get("artifactId"));
+            });
         }
         catch (SAXException | IOException e) {
             throw new RuntimeException(e);

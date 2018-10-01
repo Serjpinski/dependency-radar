@@ -11,7 +11,7 @@ public class Project {
     private final String name;
     private final File root;
     private final Map<FileType, List<File>> files;
-    private final Map<Prop, List<String>> props;
+    private final Map<Prop, List<Object>> props;
 
     public Project(String name, String path) {
 
@@ -32,7 +32,7 @@ public class Project {
         files.computeIfAbsent(fileType, k -> new ArrayList<>()).add(file);
     }
 
-    public void addProp(Prop prop, String value) {
+    public void addProp(Prop prop, Object value) {
         LogUtils.log(this, "Added prop " + prop + " = " + value);
         props.computeIfAbsent(prop, k -> new ArrayList<>()).add(value);
     }
@@ -49,7 +49,7 @@ public class Project {
         return files;
     }
 
-    public Map<Prop, List<String>> getProps() {
+    public Map<Prop, List<Object>> getProps() {
         return props;
     }
 }
