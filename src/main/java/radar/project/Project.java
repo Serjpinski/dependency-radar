@@ -33,8 +33,11 @@ public class Project {
     }
 
     public void addProp(Prop prop, Object value) {
-        LogUtils.log(this, "Added prop " + prop + " = " + value);
-        props.computeIfAbsent(prop, k -> new ArrayList<>()).add(value);
+
+        if (value != null) {
+            LogUtils.log(this, "Added prop " + prop + " = " + value);
+            props.computeIfAbsent(prop, k -> new ArrayList<>()).add(value);
+        }
     }
 
     public String getName() {

@@ -1,5 +1,6 @@
 package radar.file;
 
+import radar.file.processors.JavaFileProcessor;
 import radar.file.processors.NoOpFileProcessor;
 import radar.file.processors.PomFileProcessor;
 
@@ -11,12 +12,13 @@ public enum FileType {
     ;
 
     private static final NoOpFileProcessor NO_OP_FILE_PROCESSOR = new NoOpFileProcessor();
+    private static final JavaFileProcessor JAVA_FILE_PROCESSOR = new JavaFileProcessor();
     private static final PomFileProcessor POM_FILE_PROCESSOR = new PomFileProcessor();
 
     public FileProcessor getFileProcessor() {
 
         switch (this) {
-            case JAVA: return NO_OP_FILE_PROCESSOR;
+            case JAVA: return JAVA_FILE_PROCESSOR;
             case PY: return NO_OP_FILE_PROCESSOR;
             case JS:  return NO_OP_FILE_PROCESSOR;
             case POM: return POM_FILE_PROCESSOR;
